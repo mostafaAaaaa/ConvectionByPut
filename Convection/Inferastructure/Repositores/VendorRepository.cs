@@ -54,7 +54,7 @@ namespace Convection.Inferastructure.Repositores
             _ConvectionContext.Entry(entity).State = EntityState.Detached;
             return entity;
 
-            //
+            
         }
 
         public int InsertVendorRepository(Vendor vendor)

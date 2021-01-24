@@ -26,9 +26,9 @@ namespace Convection.Controllers
         [HttpGet("{id}")]
         public IActionResult GetAllVendors([FromRoute] int id)
         {
-            //    return Ok(_IVendorServices.GetListVendorServices());
+          
             return Ok(_IVendorServices.GetVendorByIdervices(id));
-            // return null;
+           
 
         }
         [HttpPost]
