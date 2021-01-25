@@ -9,6 +9,7 @@ namespace Convection.DTOs
     public class UpdateTagDto
     {
         [Required]
+        [MaxLength(100)]
         public string Name { get; set; }
     }
 }

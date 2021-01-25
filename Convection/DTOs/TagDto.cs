@@ -8,7 +8,7 @@ namespace Convection.DTOs
 {
     public class TagDto
     {
-      
+        [MaxLength(100)]
         [Required]
         public string Name { get; set; }
     }

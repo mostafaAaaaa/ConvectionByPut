@@ -16,7 +16,7 @@ namespace Convection.Inferastructure.IRepositores
 
         Vendor GetVendorByIdRepository(int id);
 
-        int InsertVendorRepository(Vendor vendor);
+        Vendor InsertVendorRepository(Vendor vendor);
         int DeleteVendorRepository(int id);
         int DeleteListTagsRepository(Tag tags);
 

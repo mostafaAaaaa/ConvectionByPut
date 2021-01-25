@@ -26,46 +26,86 @@ namespace Convection.Controllers
         [HttpGet("{id}")]
         public IActionResult GetAllVendors([FromRoute] int id)
         {
-          
-            return Ok(_IVendorServices.GetVendorByIdervices(id));
-           
+            var result = _IVendorServices.GetVendorByIdervices(id);
+            if (result!= null)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+
 
         }
         [HttpPost]
         public IActionResult AddVendor(InsertVendorDto dto)
         {
+            var VendorResponseDto = _IVendorServices.InsertNewVendorServices(dto);
+            return Created(new Uri($"api/Vendor/{VendorResponseDto.Id}", UriKind.Relative), VendorResponseDto);
 
-            return _IVendorServices.InsertNewVendorServices(dto);
         }
 
 
         [HttpPut("{id}")]
         public IActionResult UpdateVendor([FromRoute] int id, UpdateVendorDto dto)
         {
-            return _IVendorServices.UpdateVendorServicesByPut(dto, id);
-        }
+          
+
+                var result = _IVendorServices.UpdateVendorServicesByPut(dto, id);
+                if (result)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return StatusCode(500);
+                }
+            }
+        
 
 
         [HttpPatch("{id}")]
         public IActionResult UpdateVendor([FromRoute] int id, [FromBody] JsonPatchDocument<UpdateVendorDto> vendorPatch)
         {
 
+            var vendor = _IVendorServices.GetVendorByIdervices(id);
+            UpdateVendorDto updateVendorDto = new UpdateVendorDto();
+            updateVendorDto.Adress = vendor.Adress;
+            updateVendorDto.Date = vendor.Date;
+            updateVendorDto.Email = vendor.Email;
+            updateVendorDto.Gender = vendor.Gender;
+            updateVendorDto.PhoneNumber = vendor.PhoneNumber;
+            updateVendorDto.Title = vendor.Title;
+            updateVendorDto.VendorName = vendor.VendorName;
+            vendorPatch.ApplyTo(updateVendorDto);
 
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
+            var result = _IVendorServices.UpdateVendorServices(updateVendorDto, id);
+              
+                if (result)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return StatusCode(500);
+                }
             }
-
-
-            return _IVendorServices.UpdateVendorServices(vendorPatch, id);
-        }
+        
 
 
         [HttpDelete("{id}")]
         public IActionResult DeleteVendor([FromRoute] int id)
         {
-            return _IVendorServices.DeleteVendorServices(id);
+            var result= _IVendorServices.DeleteVendorServices(id);
+            if (result)
+            {
+                return Ok();
+            }
+            else
+            {
+                return StatusCode(500);
+            }
         }
     }
 }

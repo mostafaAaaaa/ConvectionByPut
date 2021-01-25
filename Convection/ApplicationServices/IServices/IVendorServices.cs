@@ -1,4 +1,5 @@
 ﻿using Convection.DTOs;
+using Convection.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,17 +10,15 @@ using System.Threading.Tasks;
 namespace Convection.ApplicationServices.IServices
 {
     public interface IVendorServices
-    {
-        List<TagDto> GetListTagServices();
-
+    {     
         List<VendorDto> GetListVendorServices();
 
-        JsonResult InsertNewVendorServices(InsertVendorDto vendor);
+        ResponseInsertVendorDto InsertNewVendorServices(InsertVendorDto vendor);
 
-        JsonResult DeleteVendorServices(int id);
+        bool DeleteVendorServices(int id);
 
-        JsonResult UpdateVendorServicesByPut(UpdateVendorDto dto, int id) ;
-        JsonResult UpdateVendorServices(JsonPatchDocument<UpdateVendorDto> vendorDto, int id);
+        bool UpdateVendorServicesByPut(UpdateVendorDto dto, int id) ;
+        bool UpdateVendorServices(UpdateVendorDto vendorDto, int id);
         VendorDto GetVendorByIdervices(int id);
 
     }

@@ -22,24 +22,21 @@ namespace Convection.ApplicationServices.Services
             _vendorRepository = vendorRepository;
         }
 
-        public JsonResult DeleteVendorServices(int id)
+        public bool DeleteVendorServices(int id)
         {
             int deleteResult = _vendorRepository.DeleteVendorRepository(id);
 
             if (deleteResult > 0)
             {
-                return new JsonResult(new { HttpStatusCode = HttpStatusCode.OK });
+                return true;
             }
             else
             {
-                return new JsonResult(new { HttpStatusCode = HttpStatusCode.InternalServerError });
+                return false;
             }
         }
 
-        public List<TagDto> GetListTagServices()
-        {
-            throw new NotImplementedException();
-        }
+
 
        
 
@@ -103,7 +100,7 @@ namespace Convection.ApplicationServices.Services
             return vendorDto;
         }
 
-        public JsonResult InsertNewVendorServices(InsertVendorDto vendor)
+        public ResponseInsertVendorDto InsertNewVendorServices(InsertVendorDto vendor)
         {
             List<Tag> listTag = new List<Tag>();
 
@@ -114,8 +111,6 @@ namespace Convection.ApplicationServices.Services
                 tag.Name = vendor.InseragDtos[i].Name;
                 listTag.Add(tag);
             }
-
-
           
 
             Vendor VendorForInsert = new Vendor();
@@ -129,38 +124,37 @@ namespace Convection.ApplicationServices.Services
             VendorForInsert.Tags = listTag;
 
           
-            int result = _vendorRepository.InsertVendorRepository(VendorForInsert);
+            var result = _vendorRepository.InsertVendorRepository(VendorForInsert);
+            var ResponseDto= new ResponseInsertVendorDto(){
+                Adress= result.Adress,
+                Date= result.Date,
+                Email= result.Email,
+                Id= result.Id,
+                Gender= result.Gender,
+                PhoneNumber= result.PhoneNumber,
+                Title= result.Title,
+                VendorName=result.VendorName,
+                 InseragDtos= result.Tags.Select(t => new InsertTagDto
+                 {
+                     Name = t.Name
+                 }).ToList()
 
-            if (result > 0)
-            {
-                return new JsonResult(new { HttpStatusCode = HttpStatusCode.OK });
+            };
+
+            if (ResponseDto != null)
+            {            
+                return ResponseDto;
             }
             else
-            {
-                return new JsonResult(new { HttpStatusCode = HttpStatusCode.InternalServerError });
+            {              
+                return null;
             }
         }
 
 
 
-        public JsonResult UpdateVendorServices(JsonPatchDocument<UpdateVendorDto> vendorDto, int id)
+        public bool UpdateVendorServices(UpdateVendorDto updateVendorDto, int id)
         {
-            var vendor = _vendorRepository.GetVendorByIdRepository(id);
-            if (vendor == null)
-            {
-                return new JsonResult(new { message = "اطلاعاتی با این آیدی یافت نشد" });
-            }
-            UpdateVendorDto updateVendorDto = new UpdateVendorDto();
-            updateVendorDto.Adress = vendor.Adress;
-            updateVendorDto.Date = vendor.Date;
-            updateVendorDto.Email = vendor.Email;
-            updateVendorDto.Gender = vendor.Gender;
-            updateVendorDto.PhoneNumber = vendor.PhoneNumber;
-            updateVendorDto.Title = vendor.Title;
-            updateVendorDto.VendorName = vendor.VendorName;
-
-            vendorDto.ApplyTo(updateVendorDto); 
-
 
 
             Vendor vendorUpdate = new Vendor();
@@ -178,16 +172,16 @@ namespace Convection.ApplicationServices.Services
 
             if (result > 0)
             {
-                return new JsonResult(new { HttpStatusCode = HttpStatusCode.OK });
+                return true;
             }
             else
             {
-                return new JsonResult(new { HttpStatusCode = HttpStatusCode.InternalServerError, Message = "عملیات مورد نظر انجام نشد" });
+                return false;
             }
 
         }
 
-        public JsonResult UpdateVendorServicesByPut(UpdateVendorDto dto, int id)
+        public bool UpdateVendorServicesByPut(UpdateVendorDto dto, int id)
         {
 
             var tags = _vendorRepository.GetTagByIdRepository(id);
@@ -204,7 +198,7 @@ namespace Convection.ApplicationServices.Services
                 tag.Name = dto.InseragDtos[i].Name;
                 listTag.Add(tag);
             }
-            var vendorData = _vendorRepository.GetVendorByIdRepository(id);
+       
            
             Vendor VendorForUpdate = new Vendor();
             VendorForUpdate.Id = id;
@@ -221,16 +215,15 @@ namespace Convection.ApplicationServices.Services
 
             if (result > 0)
             {
-                return new JsonResult(new { HttpStatusCode = HttpStatusCode.OK });
+                return true;
             }
             else
             {
-                return new JsonResult(new { HttpStatusCode = HttpStatusCode.InternalServerError });
+                return false;
             }
 
 
 
-            
         }
     }
 

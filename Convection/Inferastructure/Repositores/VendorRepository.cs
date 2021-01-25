@@ -57,10 +57,11 @@ namespace Convection.Inferastructure.Repositores
             
         }
 
-        public int InsertVendorRepository(Vendor vendor)
+        public Vendor InsertVendorRepository(Vendor vendor)
         {
             _ConvectionContext.vendors.Add(vendor);
-            return _ConvectionContext.SaveChanges();
+             _ConvectionContext.SaveChanges();
+            return vendor;
         }
 
         public int UpdateVendorRepository(Vendor vendor)

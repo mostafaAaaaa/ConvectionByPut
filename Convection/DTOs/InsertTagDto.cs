@@ -8,6 +8,7 @@ namespace Convection.DTOs
 {
     public class InsertTagDto
     {
+        [MaxLength(100)]
         [Required]
         public string Name { get; set; }
     }
