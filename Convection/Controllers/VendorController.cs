@@ -24,12 +24,12 @@ namespace Convection.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetAllVendors([FromRoute] int id)
+        public IActionResult GetVendorById([FromRoute] int id)
         {
-            var result = _IVendorServices.GetVendorByIdervices(id);
-            if (result!= null)
+            var responseGetVendorById = _IVendorServices.GetVendorByIdervices(id);
+            if (responseGetVendorById != null)
             {
-                return Ok(result);
+                return Ok(responseGetVendorById);
             }
             else
             {
@@ -41,8 +41,8 @@ namespace Convection.Controllers
         [HttpPost]
         public IActionResult AddVendor(InsertVendorDto dto)
         {
-            var VendorResponseDto = _IVendorServices.InsertNewVendorServices(dto);
-            return Created(new Uri($"api/Vendor/{VendorResponseDto.Id}", UriKind.Relative), VendorResponseDto);
+            var responseInsert = _IVendorServices.InsertNewVendorServices(dto);
+            return Created(new Uri($"api/Vendor/{responseInsert.Id}", UriKind.Relative), responseInsert);
 
         }
 
@@ -52,8 +52,8 @@ namespace Convection.Controllers
         {
           
 
-                var result = _IVendorServices.UpdateVendorServicesByPut(dto, id);
-                if (result)
+                var responseUpdateVendorByPut = _IVendorServices.UpdateVendorServicesByPut(dto, id);
+                if (responseUpdateVendorByPut)
                 {
                     return Ok();
                 }
@@ -80,9 +80,9 @@ namespace Convection.Controllers
             updateVendorDto.VendorName = vendor.VendorName;
             vendorPatch.ApplyTo(updateVendorDto);
 
-            var result = _IVendorServices.UpdateVendorServices(updateVendorDto, id);
+            var responseUpdateVendorByPatch = _IVendorServices.UpdateVendorServices(updateVendorDto, id);
               
-                if (result)
+                if (responseUpdateVendorByPatch)
                 {
                     return Ok();
                 }
@@ -97,8 +97,8 @@ namespace Convection.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteVendor([FromRoute] int id)
         {
-            var result= _IVendorServices.DeleteVendorServices(id);
-            if (result)
+            var responseDelete= _IVendorServices.DeleteVendorServices(id);
+            if (responseDelete)
             {
                 return Ok();
             }
